@@ -8,7 +8,7 @@
 
 
 # report.log oluştur
-echo "Rapor Başlangıç: $(date -Iseconds)" > report.log
+echo "Rapor Başlangıç: $(date '+%Y-%m-%d %H:%M:%S')" > report.log
 
 # Donanım bilgileri
 echo "=== CPU ===" >> report.log
@@ -20,14 +20,14 @@ wmic memorychip get capacity >> report.log
 echo "=== Anakart ===" >> report.log
 wmic baseboard get product,manufacturer >> report.log
 
-echo "=== Disk UUID ===" >> report.log
-wmic csproduct get uuid >> report.log
+echo "=== Disk Bilgisi ===" >> report.log
+wmic diskdrive get model,mediatype,size,serialnumber >> report.log
 
 echo "=== MAC ===" >> report.log
 getmac >> report.log
 
 # Parola alma
-read -sp "Parola gir (MYO+202): " PAROLA
+read -s -p "Parola gir: " PAROLA
 echo
 
 # AES256 ile şifreleme
