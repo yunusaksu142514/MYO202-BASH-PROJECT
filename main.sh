@@ -7,34 +7,44 @@
 # Sertifika 3: https://credsverse.com/credentials/f052fae5-a8f1-4c68-adde-90bc9d4873ed
 
 
-# report.log oluştur
+
 echo "Rapor Başlangıç: $(date '+%Y-%m-%d %H:%M:%S')" > report.log
 
-# Donanım bilgileri
+echo "=== WINDOWS DONANIM BILGILERI ===" >> report.log
+echo "" >> report.log
+
+
 echo "=== CPU ===" >> report.log
-wmic cpu get name >> report.log
+wmic cpu get Name, Manufacturer >> report.log
 
-echo "=== RAM ===" >> report.log
-wmic memorychip get capacity >> report.log
+echo "=== RAM BILGISI ===" >> report.log
+wmic memorychip get Capacity,Manufacturer,PartNumber,SerialNumber >> report.log
 
-echo "=== Anakart ===" >> report.log
-wmic baseboard get product,manufacturer >> report.log
+echo "=== ANAKART BILGISI ===" >> report.log
+wmic baseboard get Manufacturer,Product,SerialNumber >> report.log
+
+echo "=== ANAKART UUID BILGISI ===" >> report.log
+wmic csproduct get UUID >> report.log
 
 echo "=== Disk Bilgisi ===" >> report.log
 wmic diskdrive get model,mediatype,size,serialnumber >> report.log
 
-echo "=== MAC ===" >> report.log
+echo "=== MAC Adresi ===" >> report.log
 getmac >> report.log
 
-# Parola alma
+
 read -s -p "Parola gir: " PAROLA
 echo
 
-# AES256 ile şifreleme
+
 gpg --batch --yes --passphrase "$PAROLA" --symmetric --cipher-algo AES256 report.log
 
-# Orijinal dosyayı sil
+
 rm report.log
 
-echo "Şifreleme tamamlandı."
+echo ""
+echo "=== ISLEM TAMAMLANDI ==="
+echo "Orijinal rapor: report.log"
+echo "Sifrelenmis rapor: report.log.gpg"
+
 
